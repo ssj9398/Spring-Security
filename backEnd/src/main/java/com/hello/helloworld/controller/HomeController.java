@@ -1,11 +1,18 @@
 package com.hello.helloworld.controller;
 
+import com.hello.helloworld.domain.User;
+import com.hello.helloworld.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class HomeController {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping({"/", ""})
     public String index() {
@@ -22,18 +29,22 @@ public class HomeController {
         return "admin";
     }
 
-    @GetMapping("/login")
-    public @ResponseBody String login() {
-        return "login";
+    @GetMapping("/loginForm")
+    public  String loginForm() {
+        return "loginForm";
     }
 
-    @GetMapping("/join")
-    public @ResponseBody String join() {
+    @GetMapping("/joinForm")
+    public  String joinForm() {
+        return "joinForm";
+    }
+
+
+    @PostMapping ("/join")
+    public @ResponseBody String join(User user) {
+        System.out.println(user);
+        user.setRole("ROLE_USER");
+        userRepository.save(user);
         return "join";
-    }
-
-    @GetMapping("/joinProc")
-    public @ResponseBody String joinProc(){
-        return "회원가입 완료!";
     }
 }
