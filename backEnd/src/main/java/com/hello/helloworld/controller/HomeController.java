@@ -3,6 +3,7 @@ package com.hello.helloworld.controller;
 import com.hello.helloworld.domain.User;
 import com.hello.helloworld.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,9 @@ public class HomeController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping({"/", ""})
     public String index() {
@@ -41,10 +45,13 @@ public class HomeController {
 
 
     @PostMapping ("/join")
-    public @ResponseBody String join(User user) {
+    public String join(User user) {
         System.out.println(user);
         user.setRole("ROLE_USER");
+        String rawPassword = user.getPassword();
+        String encPassword = passwordEncoder.encode(rawPassword);
+        user.setPassword(encPassword);
         userRepository.save(user);
-        return "join";
+        return "redirect:/loginForm";
     }
 }
