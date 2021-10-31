@@ -47,7 +47,8 @@ public class HomeController {
     }
 
     @GetMapping("/user")
-    public @ResponseBody String user() {
+    public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        System.out.println("principalDetails" + principalDetails.getUser());
         return "user";
     }
 
