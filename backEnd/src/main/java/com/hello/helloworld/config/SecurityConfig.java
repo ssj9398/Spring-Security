@@ -1,5 +1,7 @@
 package com.hello.helloworld.config;
 
+import com.hello.helloworld.config.oauth.PrinciaplOauth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private PrinciaplOauth2UserService princiaplOauth2UserService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
@@ -30,6 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/")
                 .and()
                 .oauth2Login()
-                .loginPage("/loginForm");
+                .loginPage("/loginForm")
+                .userInfoEndpoint()
+                .userService(princiaplOauth2UserService);
     }
 }
